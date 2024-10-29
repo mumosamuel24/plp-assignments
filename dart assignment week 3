@@ -1,0 +1,74 @@
+// Abstract class defining the structure for accounts
+abstract class Account {
+  String accountType();
+}
+
+// Base class User
+class User extends Account {
+  String _username; // Protected variable
+  String _password; // Private variable
+
+  User(this._username, this._password);
+
+  String get username => _username;
+
+  void setPassword(String newPassword) {
+    // Implement some password strength check if needed
+    _password = newPassword;
+  }
+
+  bool checkPassword(String password) {
+    return _password == password;
+  }
+
+  String userRole() {
+    return "Regular User";
+  }
+
+  @override
+  String accountType() {
+    return "User Account";
+  }
+}
+
+// Subclass Admin that inherits from User
+class Admin extends User {
+  Admin(String username, String password) : super(username, password);
+
+  void resetUserPassword(User user, String newPassword) {
+    user.setPassword(newPassword);
+  }
+
+  @override
+  String userRole() {
+    return "Administrator";
+  }
+
+  @override
+  String accountType() {
+    return "Admin Account";
+  }
+}
+
+// Main function to demonstrate the functionality
+void main() {
+  // Create instances
+  User user = User("john_doe", "securepassword123");
+  Admin admin = Admin("admin_user", "adminpassword456");
+
+  // Accessing data
+  print(user.username); // Output: john_doe
+  print(user.userRole()); // Output: Regular User
+
+  // Checking password
+  print(user.checkPassword("securepassword123")); // Output: true
+
+  // Admin resetting user password
+  admin.resetUserPassword(user, "newpassword123");
+  print(user.checkPassword("newpassword123")); // Output: true
+
+  // Polymorphism in action
+  print(admin.userRole()); // Output: Administrator
+  print(user.accountType()); // Output: User Account
+  print(admin.accountType()); // Output: Admin Account
+}
